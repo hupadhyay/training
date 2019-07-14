@@ -1,0 +1,25 @@
+spring: 
+   application:
+      name: training
+   profiles:
+      active: dev
+      
+---
+spring:
+   profiles: dev
+   h2.console.enabled: true
+   h2.console.path: /h2
+        
+---
+spring:
+   profiles: prod
+   datasource:
+      url: jdbc:postgresql://localhost:5432/demoDB
+      username: postgres 
+      password: postgres
+      driver-class-name: org.postgresql.Driver
+   jpa:
+      hibernate.ddl-auto: create-drop
+      properties:
+         hibernate.jdbc.lob.non_contextual_creation: true      
+   
