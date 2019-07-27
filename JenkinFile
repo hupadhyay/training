@@ -22,21 +22,20 @@ pipeline{
 		stage('Validate Stage'){
 			steps{
 				bat 'mvn pmd:pmd'
-				bat 'mvn checkstyle:checkstyle'
 			}
 		}
 		
 		stage('Package Stage'){
 			steps{
-				bat 'mvn clean package'
+				bat 'mvn package -DskipTests'
 			}
 		}
 		
 		stage('Building Image'){
 			steps{
-				echo 'Build the image and pushInto docker hub repository'
+				echo 'Build the image'
 				script{
-					dockerImage = docker.build registory + ":$BUILD_NUMBER"
+					dockerImage = docker.build registry + ":$BUILD_NUMBER"
 				}
 			}
 		}
@@ -44,7 +43,7 @@ pipeline{
 		stage('Deploy Image') {
       		steps{
         		script {
-          			docker.withRegistry( '', registryCredential ) {
+          			docker.withRegistry( '', registryCredential) {
             			dockerImage.push()
           			}
         		}
@@ -53,7 +52,7 @@ pipeline{
     	
     	stage('Remove Unused docker image') {
       		steps{
-        		sh "docker rmi $registry:$BUILD_NUMBER"
+        		bat "docker rmi $registry:$BUILD_NUMBER"
       		}
     	}
 	}
