@@ -2,8 +2,7 @@ pipeline{
 
 	environment {
     	registry = 'hupadhyay/training'
-    	registryCredential = 'hupadhyay/Himpc@700'
-    	registryUrl= 'https://hub.docker.com/'
+    	registryCredential = 'dockerCredential'
     	dockerImage = ''
 	}
 
@@ -44,7 +43,7 @@ pipeline{
 		stage('Deploy Image') {
       		steps{
         		script {
-          			docker.withRegistry(registryUrl, registryCredential) {
+          			docker.withRegistry( '', registryCredential) {
             			dockerImage.push()
           			}
         		}
