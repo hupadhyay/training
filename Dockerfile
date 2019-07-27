@@ -6,6 +6,6 @@ WORKDIR /usr/local/lib
 
 EXPOSE 8080
 
-COPY target/training.jar
+COPY target/training.jar .
 
 CMD ["java", "-jar", "training.jar"]
