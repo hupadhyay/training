@@ -1,5 +1,13 @@
 pipeline{
+
+	environment {
+    	registry = "hupadhyay/training"
+    	registryCredential = 'Himpc@700'
+    	dockerImage = ''
+	}
+
 	agent any
+
 	tools {
         maven 'maven3' 
     }
@@ -24,11 +32,29 @@ pipeline{
 			}
 		}
 		
-		stage('Deploy Stage'){
+		stage('Building Image'){
 			steps{
-				echo 'deploy it to the server with help of SSH plugin'
+				echo 'Build the image and pushInto docker hub repository'
+				script{
+					dockerImage = docker.build registory + ":$BUILD_NUMBER"
+				}
 			}
 		}
 		
+		stage('Deploy Image') {
+      		steps{
+        		script {
+          			docker.withRegistry( '', registryCredential ) {
+            			dockerImage.push()
+          			}
+        		}
+    		}
+		}
+    	
+    	stage('Remove Unused docker image') {
+      		steps{
+        		sh "docker rmi $registry:$BUILD_NUMBER"
+      		}
+    	}
 	}
 }
