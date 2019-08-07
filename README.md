@@ -10,5 +10,8 @@ This project also use PMD and FindBug for static analysis of the code. Maven com
 mvn pmd:pmd
 mvn findbug:check
 
+### Swagger 2 Configuration
+This project also demostrate the use and configuration of swagger rest api documentation tool.
+
 
 
